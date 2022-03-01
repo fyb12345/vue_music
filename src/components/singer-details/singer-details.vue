@@ -46,7 +46,6 @@ export default {
       };
       axios.post(`${this.basePath}api/getSingerDetailData`, JSON.stringify(data))
           .then((data) => {
-            console.log(data)
             this.songList=data.data.songList;
           })
     },

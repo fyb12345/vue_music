@@ -5,7 +5,10 @@ const {getSingerData}=require("./singer/getSingerdata");
 const {getSingerDetailData}=require("./singerDetails/getSingerDetailData")
 const {getSongDetail}=require("./songDetail/getSongDetail")
 const {getLyric}=require("./lyric/getLyric")
-
+const {getRankData} = require("./rank/getRankData");
+const {getRankDetail} = require("./rankDetail/getRankDetail");
+const {getHotKey} =require("./hotKey/getHotKey")
+const {getSearchResult} = require("./search/getSearchData");
 let bodyParser = require('body-parser');
 
 let app = express();
@@ -24,11 +27,10 @@ app.all("*", function (req, res, next) { //解决跨域请求问题
     });
     if (req.method === "OPTIONS") {
         res.status(200).send("OK")
-        // eslint-disable-next-line no-console
-        console.log("has option")
+
     } else {
         next()
-    }
+    }// app.get("/api/getRankData",getRankData);
 });
 
 
@@ -38,4 +40,8 @@ app.get("/api/getSingerData",getSingerData)
 app.post("/api/getSingerDetailData",getSingerDetailData)
 app.post("/api/getSongDetailData",getSongDetail);
 app.post("/api/getLyric",getLyric)
+app.get("/api/getRankData",getRankData);
+app.get("/api/getRankDetailData/:id",getRankDetail);
+app.get("/api/getHotKey",getHotKey);
+app.get("/api/getSearchResult/:id",getSearchResult);
 app.listen(1111)

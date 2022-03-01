@@ -1,6 +1,6 @@
 <template>
     <transition name="slide">
-        <music-list :rank="rank" :title="title" :bg-image="bgImage" :songList="songs"></music-list>
+        <music-list  :title="title" :bg-image="bgImage" :songList="songs"></music-list>
     </transition>
 </template>
 
@@ -29,8 +29,6 @@
         },
         created() {
             this.songs=this.topList.songlist;
-            // eslint-disable-next-line no-console
-            console.log(this.songs);
         },
         components: {
             MusicList

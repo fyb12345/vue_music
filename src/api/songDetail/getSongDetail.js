@@ -8,8 +8,6 @@ module.exports = {
     songTable.find({
       songMid: body.mid
     }).then((data) => {
-      // eslint-disable-next-line no-console
-      console.log(body.mid);
       if (Number(data) === 0) {
         // eslint-disable-next-line no-console
         console.log("此时数据库中无数据");
@@ -23,7 +21,6 @@ module.exports = {
           let dom = new JSDOM(body, {runScripts: "dangerously"});
           // eslint-disable-next-line no-console
           let songData = dom.window.__ssrFirstPageData__.songList[0];
-          console.log(songData.url)
 
           let finalData = {
             songMid: songData.mid,
@@ -33,8 +30,6 @@ module.exports = {
             songPic: dom.window.__ssrFirstPageData__.metaData.image
           };
 
-          // eslint-disable-next-line no-console
-          console.log(finalData);
           res.send(finalData);
           if (songData.url) songTable.create(finalData);
 

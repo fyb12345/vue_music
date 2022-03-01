@@ -27,8 +27,6 @@ export default {
   },
   created() {
     this.songlist=this.disc.songlist;
-    // eslint-disable-next-line no-console
-    console.log(this.songlist);
   },
   components: {
     MusicList

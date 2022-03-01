@@ -1,13 +1,11 @@
 <template>
-  <div class="Scroll" ref="wrapper">
+  <div ref="wrapper">
     <slot></slot>
   </div>
 </template>
-
 <script>
 import BScroll from 'better-scroll'
 export default {
-  name: "Scroll",
   props: {
     /**
      * 1 滚动的时候会派发scroll事件，会截流。
@@ -82,17 +80,8 @@ export default {
       default: 20
     }
   },
-  components: {},
-  directives: {},
-  data() {
-    return {}
-  },
-  computed: {},
   mounted() {
-
-  },
-  updated(){
-    console.log(22222222222222222222222)
+    // 保证在DOM渲染完毕后初始化better-scroll
     setTimeout(() => {
       this._initScroll()
     }, 20)
@@ -104,7 +93,6 @@ export default {
       }
       // eslint-disable-next-line no-console
       // better-scroll的初始化
-
       this.scroll = new BScroll(this.$refs.wrapper, {
         probeType: this.probeType,
         click: this.click,
@@ -170,7 +158,6 @@ export default {
   watch: {
     // 监听数据的变化，延时refreshDelay时间后调用refresh方法重新计算，保证滚动效果正常
     data() {
-      console.log("数据变化");
       setTimeout(() => {
         this.refresh()
       }, this.refreshDelay)
@@ -179,6 +166,6 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="stylus" rel="stylesheet/stylus">
 
 </style>

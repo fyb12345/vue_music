@@ -198,7 +198,6 @@ export default {
       this.setPlayMode(nowMode); // 设置播放模式的值
       let list = null;//定义一个空列表, 用来存储根据播放模式不同设置的不同的列表顺序数据
       // eslint-disable-next-line no-console
-      console.log("nowMode", nowMode);
       if (nowMode === playMode.random) {
         //打乱数组, 这个打乱的功能咱们专门定义一个函数来实现,我们统一写在 common>js的里面
         list = shuffle(this.sequenceList);
@@ -210,15 +209,9 @@ export default {
       this.setPlayList(list);
     },
     resetCurrentIndex(list, song) {
-      // eslint-disable-next-line no-console
-      console.log(list);
-      // eslint-disable-next-line no-console
-      console.log(song);
       let index = list.findIndex((item) => {
         return item.songMid === song.songMid;// 匹配songMid一致的值
       });
-      // eslint-disable-next-line no-console
-      console.log(index);
       this.setCurrentIndex(index);
       //但是这里会有一些问题, 我们改变了index的值, 随之而来的currentsong也会重新激活, 那么就要重新播放
       // 所以我们监听一下, 当currenSong发现值变化了,但是songMid一致的情况下, 那么就不用变了
@@ -226,9 +219,6 @@ export default {
     },
     onProgressBarChange(percent) {
       //子组件传递过来的数据
-      // eslint-disable-next-line no-console
-      console.log("player组件的百分比", percent)
-      // eslint-disable-next-line no-console
 
       this.$refs.audio.currentTime = Math.floor(this.totalTime * percent);
       if (!this.playing) { // 如果我们拉动进度的条的时候歌曲没有在播放, 那么就把它设置为播放
@@ -240,7 +230,6 @@ export default {
     },
     format(time) {
       // eslint-disable-next-line no-console
-      //console.log(time)
       let min = Math.floor(time / 60);
       let second = Math.floor(time % 60);
 
@@ -254,10 +243,9 @@ export default {
       return `${min}:${second}`;
     },
     transformPlayTime(number) {
-      let h = Math.floor(number / 3600) < 10 ? '0' + Math.floor(number / 3600) : Math.floor(number / 3600);
       let m = Math.floor((number / 60 % 60)) < 10 ? '0' + Math.floor((number / 60 % 60)) : Math.floor((number / 60 % 60));
       let s = Math.floor((number % 60)) < 10 ? '0' + Math.floor((number % 60)) : Math.floor((number % 60));
-      return number = h + ":" + m + ":" + s;
+      return number =  m + ":" + s;
     },
     updateTime(ev) {
       this.currentTime = ev.target.currentTime;//获取当前音乐的播放时间, 这个时间一直都是秒数
@@ -345,8 +333,6 @@ export default {
     enter(el, done) {
       //el:绑定的元素
       //done: 执行下一个钩子, 和express中间件的next逻辑一致
-      // eslint-disable-next-line no-console
-      //console.log(el, done);
       //获取基本参数
       const {x, y, scale} = this._getPosAndScale()
 
@@ -404,8 +390,6 @@ export default {
       } else {
         this.$refs.lyricList.scrollTo(0.0, 1000);
       }
-      // eslint-disable-next-line no-console
-      console.log(txt)
       this.playingLyric = txt;
     },
     middleTouchStart(e) {
@@ -483,8 +467,6 @@ export default {
   watch: {
     currentSong(newSong, oldSong) {
       // 当 currentSong数据更新之后, 我们就利用当前的song里面的数据,来发送进一步的请求,得到具体的歌曲数据
-      // eslint-disable-next-line no-console
-      //console.log(this.currentSong.songMid);
       if (newSong.songMid === oldSong.songMid) {
         return; // 如果改变后这个
       }
@@ -495,10 +477,6 @@ export default {
         mid: this.currentSong.songMid
       };
       axios.post(`${this.basePath}api/getSongDetailData`, JSON.stringify(data)).then((data) => {
-        // this.songData=data.data[0];
-        // eslint-disable-next-line no-console
-        //console.log(Array.isArray(data.data));
-        console.log(data)
         if (Array.isArray(data.data)) {//部分接口返回的是一个数组,表示有多个版本
           this.songData = data.data[0]
         } else {
@@ -516,7 +494,6 @@ export default {
         songMid: this.songData.songMid
       };
       axios.post(`${this.basePath}api/getLyric`, JSON.stringify(data)).then((data) => {
-        console.log(data)
         // eslint-disable-next-line no-debugger
 
         this.currentLyric = new Lyric(data.data, this.handleLyric);
@@ -536,11 +513,7 @@ export default {
         //因为我们设置audio元素的src的瞬间, 资源还没加载好, 所以贸然直接播放是会出问题的
         this.$refs.audio.play();
       });
-      // eslint-disable-next-line no-console
-      //console.log("歌曲总时间的字符串值:", this.songData.playTime);
-      this.totalTime = Number(this.songData.playTime.split(":")[0]) * 60 + Number(this.songData.playTime.split(":")[1]);
-      // eslint-disable-next-line no-console
-      //console.log("歌曲的总时间", this.totalTime);
+
     },
     playing(newPlaying) {
       let audio = this.$refs.audio;

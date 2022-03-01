@@ -6,13 +6,13 @@
     </div>
     <div class="dots">
             <span v-for="(item, index) in dots" v-bind:key="item" class="dot"
-                  v-bind:class="{active: currentPageIndex === index }" v-bind:index="index"></span>
+                  v-bind:class="{active: currentPageIndex === index }"></span>
     </div>
   </div>
 </template>
 
 <script>
-import {addClass} from '../../common/js/dom'
+import {addClass} from '@/common/js/dom'
 import BScroll from 'better-scroll'
 
 export default {
@@ -65,10 +65,7 @@ export default {
   methods: {
     //设置slider的宽度
     _setSliderWidth(isResize) {
-      console.log(this.$refs.sliderGroup.children)
       this.children = this.$refs.sliderGroup.children;
-      // eslint-disable-next-line no-console
-      console.log(this.children.length)
       //拿到子元素的个数, 根据图片的个数渲染出对应的dot的个数
       let width = 0;//默认宽度值为0, 后面再增加
       let sliderWidth = this.$refs.slider.clientWidth;//获取整个的slider的宽度
@@ -97,10 +94,7 @@ export default {
       //监听滚动事件 当翻到下一页结束后,改变索引, 得到小圆点的变化效果
       this.slider.on('scrollEnd', () => {
         //获取当前的第几个子元素
-        let pageIndex = this.slider.getCurrentPage().pageX;
-        // eslint-disable-next-line no-console
-        console.log(pageIndex);
-        this.currentPageIndex = pageIndex;//存储一下当前的页面索引值
+        this.currentPageIndex = this.slider.getCurrentPage().pageX;//存储一下当前的页面索引值
         if (this.autoPlay) {// 如果开启了自动播放, 那么就清楚定时器并手动再启动一次
           clearTimeout(this.timer);
           this._play()

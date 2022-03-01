@@ -1,12 +1,12 @@
 <template>
   <div ref="recommend" class="recommend">
-    <scroll class="recommend-content" v-bind:data="disclist" ref="list" :key="1111">
+    <scroll v-if="sliderRecommends.length" ref="list" class="recommend-content" v-bind:data="disclist">
       <div><!-- 滚动插件里面需要加一个子元素, 让内部的元素撑开高度 -->
         <div ref="sliderWrapper" class="slider-wrapper">
           <slider>
             <div v-for="item in sliderRecommends" v-bind:key="item.id" v-on:click="selectItem(item)">
               <a>
-                <img alt="" v-bind:src="item.cover">
+                <img alt="图片" v-bind:src="item.cover">
               </a>
             </div>
           </slider>
@@ -16,7 +16,7 @@
           <ul>
             <li v-for="item in disclist" v-bind:key="item.id" class="item" v-on:click="selectItem(item)">
               <div class="icon">
-                <img height="60" v-bind:src="item.cover" width="60" alt="cover">
+                <img height="60" v-bind:src="item.cover" width="60" alt="图片">
               </div>
               <div class="text">
                 <h2 class="name" v-html="item.category"></h2>
@@ -26,52 +26,44 @@
           </ul>
         </div>
       </div>
-
-
-      <div class="loading-container" v-show="!disclist.length"><!-- 在获取到数据之前加载 -->
+      <div v-show="!disclist.length" class="loading-container"><!-- 在获取到数据之前加载 -->
         <loading></loading>
       </div>
     </scroll>
-
     <router-view></router-view>
   </div>
 </template>
-
 <script>
 import axios from "axios"
 import Slider from "../base/slider"
-import scroll from "../base/scroll";
-import loading from "../base/loading";
+import Scroll from "../base/scroll"
+import Loading from "../base/loading"
 import {playlistMixin} from "@/common/js/mixin";
 import {mapMutations} from "vuex";
+
 export default {
-  mixins:[playlistMixin],
+  mixins: [playlistMixin],
   data() {
     return {
-      sliderRecommends: [],//存放轮播的推荐信息,
-      disclist: []
+      sliderRecommends: [],//存放轮播的推荐信息
+      disclist: []//存储下面列表信息的推荐信息
     }
   },
-  computed: {},
   beforeCreate() {
-    console.log("创建组件之前")
-    axios.get(`${this.basePath}api/getRecommendData`)
-        .then((data) => {
-          this.sliderRecommends = data.data.shift().categoryList;//第一个歌单列表作为轮播图的部分
-          data.data.forEach(item => {//剩余的数据 作为剩下的列表部分
-            this.disclist= item.categoryList.map(item1 => {//获取列表里面的核心数据
-              item1.category = item.category;//每个单独的数据,保存一下这个歌单的父类数据
-              return item1
-            });
-          });
-        })
-  },
-  mounted() {
-    console.log(this.$refs)
+    console.log("组件加载之前");
+    axios.get(`${this.basePath}api/getRecommendData`).then((data) => {
+      this.sliderRecommends = data.data.shift().categoryList;//第一个歌单列表作为轮播图的部分
+      data.data.forEach(item => {//剩余的数据 作为剩下的列表部分
+        item.categoryList.forEach(item1 => {//获取列表里面的核心数据
+          item1.category = item.category;//每个单独的数据,保存一下这个歌单的父类数据
+          this.disclist.push(item1);
+        });
+      });
+    })
   },
   methods: {
     ...mapMutations({
-      setDisc:"SET_DISC"
+      setDisc: "SET_DISC"
     }),
     handlePlaylist(playlist) {
       // 监听是否得到了playlist的值
@@ -79,19 +71,18 @@ export default {
       this.$refs.list.refresh();
     },
     selectItem(item) {
-      axios.get(`${this.basePath}api/getRecommendDetailData/${item.id}`).then( (data)=>{
-        this.$router.push(`/recommend/${item.id}`)
+      axios.get(`${this.basePath}api/getRecommendDetailData/${item.id}`).then((data) => {
+        this.$router.push(`/recommend/${item.id}`);//设置路由
         this.setDisc(data.data[0]);
-      }).catch((err) => {
-        if (err) throw  err;
+
       })
-      return false;
+
     }
   },
   components: {
     Slider,
-    scroll,
-    loading
+    Scroll,
+    Loading
   }
 }
 

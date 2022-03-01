@@ -39,8 +39,9 @@ import songlist from "../base/song-list"
 import Scroll from "../base/scroll"
 import loading from "../base/loading";
 import {mapActions} from "vuex";
-// import {playlistMixin} from "../../common/js/mixin";
+import {playlistMixin} from "@/common/js/mixin";
 export default {
+  mixins: [playlistMixin],// 引用混入组件
   name: "music-list",
   components: {
     Scroll,
@@ -95,8 +96,6 @@ export default {
     selectItem(item, index) {
       //设置playlist,playing,fullscreen, playMode, currentIndex等值
       //这种复杂的值设置,我们可以专门设置一个actions来处理
-      // eslint-disable-next-line no-console
-      console.log(item, index)
       this.selectPlay({ // 其他的就是默认的值
         list: this.songList,//传入当前数据的歌曲列表
         index: index,//当前歌曲索引
@@ -129,7 +128,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.songList)
     //设置一个偏移量, 使得下方的songlist组件不要把上面的歌手图片给遮住了
     this.$refs.list.$el.style.top = `${this.$refs.bgImage.clientHeight}px`;
 

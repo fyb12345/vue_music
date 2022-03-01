@@ -41,7 +41,7 @@ export default {
           page: this.page
         }
       }).then((res) => {
-        if (res.data.data.length!==0){
+        if (res.data.data.length){
           this.singerList =[...this.singerList,...res.data.data]
           this.page=res.data.page
         }

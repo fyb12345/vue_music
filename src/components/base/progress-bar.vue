@@ -70,12 +70,7 @@
             percent(newPercent) {
                 if (newPercent >= 0 && !this.touch.initiated) {
                     //当比例值发生变化时, 我们重新设置一次进度条的效果
-                    // eslint-disable-next-line no-console
-                    // console.log("this.$refs.progressBar.clientWidth",this.$refs.progressBar.clientWidth)
-                    // eslint-disable-next-line no-console
-                    // console.log("progressBtnWidth",progressBtnWidth)
-                    // eslint-disable-next-line no-console
-                    //console.log("进度条组件的百分比",newPercent);
+
                     const barWidth = this.$refs.progressBar.clientWidth - progressBtnWidth;
                     const offsetWidth = newPercent * barWidth;
                     this._offset(offsetWidth)
