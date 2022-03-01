@@ -89,6 +89,10 @@ export default {
   },
   computed: {},
   mounted() {
+
+  },
+  updated(){
+    console.log(22222222222222222222222)
     setTimeout(() => {
       this._initScroll()
     }, 20)
@@ -99,8 +103,8 @@ export default {
         return
       }
       // eslint-disable-next-line no-console
-      console.log(this.$refs.wrapper)
       // better-scroll的初始化
+
       this.scroll = new BScroll(this.$refs.wrapper, {
         probeType: this.probeType,
         click: this.click,
@@ -108,7 +112,6 @@ export default {
       })
 
       // eslint-disable-next-line no-console
-      console.log(this.scroll)
       // 是否派发滚动事件
       if (this.listenScroll) {
         this.scroll.on('scroll', (pos) => {
@@ -167,12 +170,10 @@ export default {
   watch: {
     // 监听数据的变化，延时refreshDelay时间后调用refresh方法重新计算，保证滚动效果正常
     data() {
-      // eslint-disable-next-line no-console
       console.log("数据变化");
       setTimeout(() => {
         this.refresh()
       }, this.refreshDelay)
-
     }
   }
 }

@@ -1,10 +1,12 @@
 const express = require("express");
 const {getRecommendData} = require("./recommend/getRecommendData")
 const {getRecommendDetailData}=require("./recommendDetail/setDetailDate")
+const {getSingerData}=require("./singer/getSingerdata");
+const {getSingerDetailData}=require("./singerDetails/getSingerDetailData")
+const {getSongDetail}=require("./songDetail/getSongDetail")
+const {getLyric}=require("./lyric/getLyric")
 
-
-
-var bodyParser = require('body-parser');
+let bodyParser = require('body-parser');
 
 let app = express();
 
@@ -32,4 +34,8 @@ app.all("*", function (req, res, next) { //解决跨域请求问题
 
 app.get("/api/getRecommendData", getRecommendData)
 app.get("/api/getRecommendDetailData/:id",getRecommendDetailData)
+app.get("/api/getSingerData",getSingerData)
+app.post("/api/getSingerDetailData",getSingerDetailData)
+app.post("/api/getSongDetailData",getSongDetail);
+app.post("/api/getLyric",getLyric)
 app.listen(1111)

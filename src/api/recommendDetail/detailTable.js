@@ -4,12 +4,12 @@ const Schema = mongoose.Schema;
 
 mongoose.connect("mongodb://127.0.0.1:271:27017/YiMing", {useNewUrlParser: true, useUnifiedTopology: true})
     .then(() => {
-        console.log("数据库链接成功")
+        console.log("数据库链接成功");
     })
     .catch((err) => {
         if (err) throw err;
-        console.log("数据库链接失败")
-    })
+        console.log("数据库链接失败");
+    });
 
 let detailSchema= new Schema({
     id:{//用作于后期的数据识别
@@ -74,5 +74,5 @@ let detailSchema= new Schema({
     ]
 });
 
-let detailTable = mongoose.model("detailTable", detailSchema)
-module.exports = {detailTable}
+let detailTable = mongoose.model("detailTable", detailSchema);
+module.exports = {detailTable};

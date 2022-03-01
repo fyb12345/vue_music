@@ -8,7 +8,6 @@ module.exports = {
             _id: false
         }).then((data) => {
             // eslint-disable-next-line no-console
-            console.log(data);
             res.send(JSON.stringify(data))
         }).catch((err) => {
             if (err) throw  err;

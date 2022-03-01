@@ -1,6 +1,6 @@
 <template>
   <div ref="recommend" class="recommend">
-    <scroll class="recommend-content" v-bind:data="disclist" ref="list">
+    <scroll class="recommend-content" v-bind:data="disclist" ref="list" :key="1111">
       <div><!-- 滚动插件里面需要加一个子元素, 让内部的元素撑开高度 -->
         <div ref="sliderWrapper" class="slider-wrapper">
           <slider>
@@ -42,8 +42,10 @@ import axios from "axios"
 import Slider from "../base/slider"
 import scroll from "../base/scroll";
 import loading from "../base/loading";
-
+import {playlistMixin} from "@/common/js/mixin";
+import {mapMutations} from "vuex";
 export default {
+  mixins:[playlistMixin],
   data() {
     return {
       sliderRecommends: [],//存放轮播的推荐信息,
@@ -55,12 +57,11 @@ export default {
     console.log("创建组件之前")
     axios.get(`${this.basePath}api/getRecommendData`)
         .then((data) => {
-          console.log(111111111111111111111)
           this.sliderRecommends = data.data.shift().categoryList;//第一个歌单列表作为轮播图的部分
           data.data.forEach(item => {//剩余的数据 作为剩下的列表部分
-            item.categoryList.forEach(item1 => {//获取列表里面的核心数据
+            this.disclist= item.categoryList.map(item1 => {//获取列表里面的核心数据
               item1.category = item.category;//每个单独的数据,保存一下这个歌单的父类数据
-              this.disclist.push(item1);
+              return item1
             });
           });
         })
@@ -69,6 +70,9 @@ export default {
     console.log(this.$refs)
   },
   methods: {
+    ...mapMutations({
+      setDisc:"SET_DISC"
+    }),
     handlePlaylist(playlist) {
       // 监听是否得到了playlist的值
       this.$refs.recommend.style.bottom = playlist.length > 0 ? "50px" : "";
@@ -76,12 +80,12 @@ export default {
     },
     selectItem(item) {
       axios.get(`${this.basePath}api/getRecommendDetailData/${item.id}`).then( (data)=>{
-        console.log(data)
         this.$router.push(`/recommend/${item.id}`)
+        this.setDisc(data.data[0]);
       }).catch((err) => {
         if (err) throw  err;
       })
-
+      return false;
     }
   },
   components: {
